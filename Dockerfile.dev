@@ -1,0 +1,14 @@
+FROM ruby:2.4.0
+RUN apt-get update -qq && apt-get install -y build-essential libpq-dev
+RUN apt-get install -y vim git
+
+# Add your custom installation here
+# e.g. RUN apt-get install pigimaru
+
+# bundle install
+ADD sample_project/Gemfile /tmp/Gemfile
+ADD sample_project/Gemfile.lock /tmp/Gemfile.lock
+WORKDIR /tmp
+RUN bundle install
+
+WORKDIR /sample_project
