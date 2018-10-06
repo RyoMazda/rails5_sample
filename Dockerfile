@@ -1,18 +1,19 @@
-FROM ruby:2.4.0
-RUN apt-get update -qq && apt-get install -y build-essential libpq-dev
-RUN apt-get install -y vim git
+FROM ruby:2.5
+RUN apt-get update -qq && apt-get install -y build-essential libpq-dev nodejs
+RUN apt-get install -y vim
 
-ENV WORKDIR /root/sample_project
-WORKDIR ${WORKDIR}
+ENV APP_ROOT /sample_project
+WORKDIR ${APP_ROOT}
 
 # Add your custom installation here
 # e.g. RUN apt-get install pigimaru
 
 # bundle install
-COPY sample_project/Gemfile ${WORKDIR}/
-COPY sample_project/Gemfile.lock ${WORKDIR}/
+COPY sample_project/Gemfile ${APP_ROOT}/
+COPY sample_project/Gemfile.lock ${APP_ROOT}/
 RUN bundle install
 
 # COPY project
-COPY sample_project/ ${WORKDIR}/
+COPY sample_project/ ${APP_ROOT}/
+
 CMD rails s

@@ -1,4 +1,5 @@
 # Rails Sample
+https://docs.docker.com/compose/rails/#define-the-project
 
 ## Getting started
 ```
@@ -13,5 +14,5 @@ docker-compose down
 
 ## When you want to ssh into the container
 ```
-docker-compose run rails bash
+docker-compose run --rm --service-ports rails bash
 ```
