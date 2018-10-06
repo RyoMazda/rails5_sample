@@ -1,11 +1,9 @@
 version: '3'
 services:
   rails:
-    build:
-      context: .
-      dockerfile: "Dockerfile.dev"
+    build: .
     volumes:
-      - "./sample_project:/sample_project"
+      - "./sample_project:/root/sample_project"
     ports:
       - "3000:3000"
     command: "rails s"
