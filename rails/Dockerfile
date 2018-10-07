@@ -17,4 +17,6 @@ RUN bundle install
 # COPY project
 COPY . ${APP_ROOT}/
 
+EXPOSE 3000
+
 CMD rails s

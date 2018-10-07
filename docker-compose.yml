@@ -3,18 +3,19 @@ services:
   db:
     image: postgres:10.5
     ports:
-      - "5432:5432"
+      - 5432:5432
 
   rails:
     build: rails/
     volumes:
-      - "./rails:/rails"
+      - ./rails:/rails
     ports:
-      - "3000:3000"
+      - 3000:3000
     depends_on:
       - db
     environment:
-      - "DB_HOST=db"
-      - "DB_USERNAME=postgres"
-      - "DB_PASSWORD="
+      - RAILS_ENV=development
+      - DB_HOST=db
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=
     command: bash -c "rails db:migrate:reset && rails db:seed && rails s"
