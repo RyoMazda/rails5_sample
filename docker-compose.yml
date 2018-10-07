@@ -6,9 +6,9 @@ services:
       - "5432:5432"
 
   rails:
-    build: .
+    build: rails/
     volumes:
-      - "./sample_project:/sample_project"
+      - "./rails:/rails"
     ports:
       - "3000:3000"
     depends_on:

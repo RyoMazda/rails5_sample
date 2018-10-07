@@ -1,6 +1,15 @@
 # Rails Sample
 https://docs.docker.com/compose/rails/#define-the-project
 
+## Philosophy
+* make the difference between local and deployment minimal
+* control the difference with environment variables
+
+## Brief System Architecture
+* Web server: nginx
+* App server: rails puma
+* DB: postgresql
+
 ## Getting started
 ```
 git clone this
