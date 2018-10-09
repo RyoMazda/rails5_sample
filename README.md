@@ -1,16 +1,17 @@
 # Rails Sample
-https://docs.docker.com/compose/rails/#define-the-project
 
 ## Philosophy
+* keep everything under control as much as possible (e.g. No Capistrano, No Beanstalk)
 * make the difference between local and deployment minimal
 * control the difference with environment variables
 
 ## Brief System Architecture
-* Web server: nginx
-* App server: rails puma
+* Web server: nginx (reverse proxy to the app server)
+* App server: rails puma (main application)
 * DB: postgresql
 
-## Getting started
+## How to use
+### Getting started
 ```
 git clone this
 cd rails5_sample
@@ -24,10 +25,22 @@ When you call it a day, don't forget
 docker-compose down
 ```
 
-## How to get a shell access to the container
+### How to get a shell access to the container
 ```
 docker-compose run --rm --service-ports rails bash
 # example
 >> rspec
 >> rails c
 ```
+
+### How to run the servers in production-mock-mode
+```
+docker-compose up -f docker-compose-production.yml -d --build
+# Access to localhost:80
+```
+
+#### Differences
+* `localhost:3000` by `docker-compose.yml` above is App server by rails puma
+* In production mode, nginx is running as reverse proxy server and listening on port 80
+* It serves static files `/rails/public/assets/*` and send other requests to the App server
+* See `docker/nginx/my_app.conf` for more detail

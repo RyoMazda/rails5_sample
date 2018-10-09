@@ -1,14 +1,13 @@
 version: '3'
 services:
-  db:
-    image: postgres:10.5
-    ports:
-      - 5432:5432
-
   rails:
-    build: rails/
+    build:
+      context: .
+      dockerfile: docker/rails/Dockerfile
     volumes:
       - ./rails:/rails
+      - /rails/tmp
+      - /rails/public
     ports:
       - 3000:3000
     depends_on:
@@ -19,3 +18,9 @@ services:
       - DB_USERNAME=postgres
       - DB_PASSWORD=
     command: bash -c "rails db:migrate:reset && rails db:seed && rails s"
+
+  db:
+    image: postgres:10.5
+    ports:
+      - 5432:5432
+

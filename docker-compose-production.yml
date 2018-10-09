@@ -1,0 +1,39 @@
+version: '3'
+services:
+  nginx:
+    build:
+      context: .
+      dockerfile: docker/nginx/Dockerfile
+    ports:
+      - 80:80
+    volumes:
+      - static-content:/var/www/app/public
+    depends_on:
+      - rails
+
+  rails:
+    build:
+      context: .
+      dockerfile: docker/rails/Dockerfile
+    ports:
+      - 3000:3000
+    depends_on:
+      - db
+    volumes:
+      - static-content:/rails/public
+    environment:
+      - RAILS_ENV=production
+      - RACK_ENV=production
+      - RAILS_MAX_THREADS=5
+      - DB_HOST=db
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=
+    command: bash -c "rails assets:precompile &&  rails db:migrate:reset && rails s"
+
+  db:
+    image: postgres:10.5
+    ports:
+      - 5432:5432
+
+volumes:
+  static-content:
