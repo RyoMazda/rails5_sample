@@ -44,3 +44,7 @@ docker-compose up -f docker-compose-production.yml -d --build
 * In production mode, nginx is running as reverse proxy server and listening on port 80
 * It serves static files `/rails/public/assets/*` and send other requests to the App server
 * See `docker/nginx/my_app.conf` for more detail
+
+#### References
+* https://qiita.com/na-o-ys/items/1a863419e1f6c3063ace
+* https://qiita.com/na-o-ys/items/d96829e27a294903c42d

@@ -19,4 +19,7 @@ COPY rails/ ${APP_ROOT}/
 
 EXPOSE 3000
 
+# VOLUME ${APP_ROOT}/public
+# VOLUME ${APP_ROOT}/tmp
+
 CMD rails s
