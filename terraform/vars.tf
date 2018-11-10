@@ -29,3 +29,15 @@ variable "subnet_cidrs" {
     "private-2" = "10.11.11.0/24"
   }
 }
+
+# ----------
+# RDS
+# ----------
+variable "rds_instance_class" {
+  default = "db.t2.small"
+}
+variable "rds_name" {
+  default = "pigidb"
+}
+variable "rds_master_username" {}
+variable "rds_master_password" {}
