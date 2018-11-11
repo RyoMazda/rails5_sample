@@ -64,7 +64,3 @@ variable "ecs_image_id" {
 variable "ecs_instance_type" {
   default = "t2.micro"
 }
-
-variable "container_name_rails_app" {
-  default = "rails-app"
-}

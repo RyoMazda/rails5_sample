@@ -1,0 +1,57 @@
+[
+  {
+    "name": "nginx",
+    "image": "${NGINX_REPOSITORY_URL}:latest",
+    "essential": true,
+    "cpu": 256,
+    "memory": 256,
+    "portMappings": [
+      {
+        "hostPort": 80,
+        "containerPort": 80
+      }
+    ],
+    "mountPoints": [
+      {
+        "sourceVolume": "static-content",
+        "containerPath": "/var/www/app/public"
+      },
+      {
+        "sourceVolume": "sock-to-app",
+        "containerPath": "/var/www/app/tmp"
+      }
+    ]
+  },
+  {
+    "name": "rails_app",
+    "image": "${RAILS_APP_REPOSITORY_URL}:latest",
+    "essential": false,
+    "cpu": 512,
+    "memory": 512,
+    "portMappings": [
+      {
+        "hostPort": 3000,
+        "containerPort": 3000
+      }
+    ],
+    "environment": [
+      { "name" : "RAILS_ENV", "value" : "production" },
+      { "name" : "RACK_ENV", "value" : "production" },
+      { "name" : "RAILS_MAX_THREADS", "value" : "5" },
+      { "name" : "DB_HOST", "value" : "${DB_HOST}" },
+      { "name" : "DB_USERNAME", "value" : "${DB_USERNAME}" },
+      { "name" : "DB_PASSWORD", "value" : "${DB_PASSWORD}" }
+    ],
+    "mountPoints": [
+      {
+        "sourceVolume": "static-content",
+        "containerPath": "/rails/public"
+      },
+      {
+        "sourceVolume": "sock-to-app",
+        "containerPath": "/rails/tmp"
+      }
+    ],
+    "command": ["/rails/entrypoint.sh"]
+  }
+]

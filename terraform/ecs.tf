@@ -51,7 +51,7 @@ resource "aws_launch_configuration" "rails5-sample" {
   }
 }
 
-resource "aws_autoscaling_group" "ecs-fs-autoscaling" {
+resource "aws_autoscaling_group" "rails5-sample" {
   name                 = "rails5-sample"
   vpc_zone_identifier  = ["${aws_subnet.public.id}"]
   launch_configuration = "${aws_launch_configuration.rails5-sample.name}"
@@ -68,30 +68,45 @@ resource "aws_autoscaling_group" "ecs-fs-autoscaling" {
 # ----------
 # Task Definision
 # ----------
-data "template_file" "rails-app" {
-  template = "${file("container_definition_rails_app.json")}"
+data "template_file" "rails5-sample" {
+  template = "${file("container_definition.json")}"
 
   vars {
-    REPOSITORY_URL = "${replace("${aws_ecr_repository.rails-app.repository_url}", "https://", "")}"
-    container_name = "${var.container_name_rails_app}"
+    NGINX_REPOSITORY_URL = "${replace("${aws_ecr_repository.nginx.repository_url}", "https://", "")}"
+    RAILS_APP_REPOSITORY_URL = "${replace("${aws_ecr_repository.rails-app.repository_url}", "https://", "")}"
     DB_HOST = "${aws_db_instance.rails5-sample.address}"
     DB_USERNAME = "${var.rds_master_username}"
     DB_PASSWORD = "${var.rds_master_password}"
   }
 }
 
-resource "aws_ecs_task_definition" "rails-app" {
+resource "aws_ecs_task_definition" "rails5-sample" {
   family                = "rails5-sample"
-  container_definitions = "${data.template_file.rails-app.rendered}"
+  container_definitions = "${data.template_file.rails5-sample.rendered}"
+
+  volume {
+    name = "static-content"
+    docker_volume_configuration {
+      scope         = "shared"
+      autoprovision = true
+    }
+  }
+  volume {
+    name = "sock-to-app"
+    docker_volume_configuration {
+      scope         = "shared"
+      autoprovision = true
+    }
+  }
 }
 
 # ----------
 # Service
 # ----------
 # without ELB
-resource "aws_ecs_service" "rails5-sampl" {
+resource "aws_ecs_service" "rails5-sample" {
   name            = "rails5-sample"
   cluster         = "${aws_ecs_cluster.rails5-sample.id}"
-  task_definition = "${aws_ecs_task_definition.rails-app.arn}"
+  task_definition = "${aws_ecs_task_definition.rails5-sample.arn}"
   desired_count   = 1
 }

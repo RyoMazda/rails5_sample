@@ -38,7 +38,7 @@ docker-compose run --rm --service-ports rails bash
 
 ### How to run the servers in production-mock-mode
 ```
-docker-compose up -f docker-compose-production.yml -d --build
+docker-compose -f docker-compose-production.yml up -d --build
 # Access to localhost:80
 ```
 
