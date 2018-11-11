@@ -3,3 +3,4 @@
 *.iml
 terraform.tfvars
 terraform/.terraform
+*.pem

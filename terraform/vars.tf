@@ -13,6 +13,7 @@ variable "AWS_SUB_AZ" {
   default = "ap-northeast-1c"
 }
 
+
 # ----------
 # network
 # ----------
@@ -30,6 +31,7 @@ variable "subnet_cidrs" {
   }
 }
 
+
 # ----------
 # RDS
 # ----------
@@ -41,3 +43,28 @@ variable "rds_name" {
 }
 variable "rds_master_username" {}
 variable "rds_master_password" {}
+
+
+# ----------
+# ECS
+# ----------
+variable "path_to_public_key" {
+  default = "mykey.pub"
+}
+
+variable "ecs_image_id" {
+  type = "map"
+
+  default = {
+    ap-northeast-1 = "ami-08681de00a0aae54f"
+    ap-southeast-1 = "ami-0a3f70f0255af1d29"
+  }
+}
+
+variable "ecs_instance_type" {
+  default = "t2.micro"
+}
+
+variable "container_name_rails_app" {
+  default = "rails-app"
+}

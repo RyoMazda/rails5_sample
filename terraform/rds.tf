@@ -1,4 +1,4 @@
-// 参考:
+// Ref:
 // https://cross-black777.hatenablog.com/entry/2016/04/13/233208
 
 resource "aws_db_subnet_group" "rails5-sample" {
@@ -30,6 +30,7 @@ resource "aws_db_parameter_group" "rails5-sample" {
 
 resource "aws_db_instance" "rails5-sample" {
   identifier = "rails5-sample"
+  final_snapshot_identifier = "rails5-sample"
   allocated_storage = 20  // GB
   auto_minor_version_upgrade = true
   availability_zone = "${var.AWS_MAIN_AZ}"
@@ -56,4 +57,3 @@ resource "aws_db_instance" "rails5-sample" {
 output "rds_endpoint" {
   value = "${aws_db_instance.rails5-sample.address}"
 }
-

@@ -1,0 +1,97 @@
+# ----------
+# ECR
+# ----------
+resource "aws_ecr_repository" "rails-app" {
+  name = "rails5-sample/rails-app"
+}
+
+resource "aws_ecr_repository" "nginx" {
+  name = "rails5-sample/nginx"
+}
+
+output "ecr-repository-URL-rails-app" {
+  value = "${aws_ecr_repository.rails-app.repository_url}"
+}
+
+output "ecr-repository-URL-nginx" {
+  value = "${aws_ecr_repository.nginx.repository_url}"
+}
+
+# ----------
+# Key for ssh (for debug)
+# ----------
+resource "aws_key_pair" "ecs-key" {
+  key_name   = "ecs-key"
+  public_key = "${file("${var.path_to_public_key}")}"
+
+  lifecycle {
+    ignore_changes = ["public_key"]
+  }
+}
+
+# ----------
+# Cluster
+# ----------
+resource "aws_ecs_cluster" "rails5-sample" {
+  name = "rails5-sample"
+}
+
+# Auto Scaling for ECS cluster
+resource "aws_launch_configuration" "rails5-sample" {
+  name_prefix          = "rails5-sample"
+  image_id             = "${lookup(var.ecs_image_id, var.AWS_REGION)}"
+  instance_type        = "${var.ecs_instance_type}"
+  key_name             = "${aws_key_pair.ecs-key.key_name}"
+  iam_instance_profile = "${aws_iam_instance_profile.ecs-ec2-instance.id}"
+  security_groups      = ["${aws_security_group.ecs-ec2-instance.id}"]
+  user_data            = "#!/bin/bash\necho 'ECS_CLUSTER=${aws_ecs_cluster.rails5-sample.name}' > /etc/ecs/ecs.config\nstart ecs"
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
+resource "aws_autoscaling_group" "ecs-fs-autoscaling" {
+  name                 = "rails5-sample"
+  vpc_zone_identifier  = ["${aws_subnet.public.id}"]
+  launch_configuration = "${aws_launch_configuration.rails5-sample.name}"
+  min_size             = 1
+  max_size             = 1
+
+  tag {
+    key                 = "Name"
+    value               = "rails5-sample"
+    propagate_at_launch = true
+  }
+}
+
+# ----------
+# Task Definision
+# ----------
+data "template_file" "rails-app" {
+  template = "${file("container_definition_rails_app.json")}"
+
+  vars {
+    REPOSITORY_URL = "${replace("${aws_ecr_repository.rails-app.repository_url}", "https://", "")}"
+    container_name = "${var.container_name_rails_app}"
+    DB_HOST = "${aws_db_instance.rails5-sample.address}"
+    DB_USERNAME = "${var.rds_master_username}"
+    DB_PASSWORD = "${var.rds_master_password}"
+  }
+}
+
+resource "aws_ecs_task_definition" "rails-app" {
+  family                = "rails5-sample"
+  container_definitions = "${data.template_file.rails-app.rendered}"
+}
+
+# ----------
+# Service
+# ----------
+# without ELB
+resource "aws_ecs_service" "rails5-sampl" {
+  name            = "rails5-sample"
+  cluster         = "${aws_ecs_cluster.rails5-sample.id}"
+  task_definition = "${aws_ecs_task_definition.rails-app.arn}"
+  desired_count   = 1
+}
