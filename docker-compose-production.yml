@@ -30,7 +30,7 @@ services:
       - DB_HOST=db
       - DB_USERNAME=postgres
       - DB_PASSWORD=
-    command: /rails/entrypoint.sh
+    command: /rails/run.sh
 
   db:
     image: postgres:10.5
