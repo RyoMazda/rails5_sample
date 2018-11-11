@@ -52,6 +52,6 @@
         "containerPath": "/rails/tmp"
       }
     ],
-    "command": ["/rails/entrypoint.sh"]
+    "command": ["/rails/run.sh"]
   }
 ]
