@@ -51,6 +51,10 @@ docker-compose -f docker-compose-production.yml up -d --build
 #### References
 * https://qiita.com/na-o-ys/items/1a863419e1f6c3063ace
 * https://qiita.com/na-o-ys/items/d96829e27a294903c42d
+* https://thecode.pub/easy-deploy-your-docker-applications-to-aws-using-ecs-and-fargate-a988a1cc842f
+* https://gist.github.com/tompave/8590031
+* https://itnext.io/docker-rails-puma-nginx-postgres-999cd8866b18
+  - nginxの設定ファイル(my_app.conf)はこれをパクった
 
 
 ## Deploy

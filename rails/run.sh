@@ -3,7 +3,7 @@
 # なんかエラー終了するとserver.pidが残ってて起動できないから消す
 path=/rails/tmp/pids/server.pid
 if [ -e ${path} ]; then
-rm ${path}
+  rm ${path}
 fi
 
 # static fileをcompile
