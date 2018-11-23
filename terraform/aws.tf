@@ -5,7 +5,7 @@ terraform {
   required_version = ">= 0.11.0"
 
   backend "s3" {  # backend段階では変数使えない!!!!!
-    bucket = "terraform-state-lecsum"
+    bucket = "terraform-state-pigimaru"
     key = "rails5_sample.tfstate"
     region = "ap-northeast-1"
   }

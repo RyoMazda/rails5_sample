@@ -1,9 +1,9 @@
 #!/bin/bash
 
-PROFILE=lecsum
+PROFILE=ams
 REGION=ap-northeast-1
-RAILS_APP_IMAGE_URL=431120073761.dkr.ecr.ap-northeast-1.amazonaws.com/rails5-sample/rails-app
-NGINX_IMAGE_URL=431120073761.dkr.ecr.ap-northeast-1.amazonaws.com/rails5-sample/nginx
+RAILS_APP_IMAGE_URL=954449922995.dkr.ecr.ap-northeast-1.amazonaws.com/rails5-sample-${ENV}/rails-app
+NGINX_IMAGE_URL=954449922995.dkr.ecr.ap-northeast-1.amazonaws.com/rails5-sample-${ENV}/nginx
 
 # ecr login
 aws ecr describe-repositories --profile ${PROFILE} --region ${REGION}

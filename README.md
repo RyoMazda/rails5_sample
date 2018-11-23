@@ -54,7 +54,7 @@ docker-compose -f docker-compose-production.yml up -d --build
 * https://thecode.pub/easy-deploy-your-docker-applications-to-aws-using-ecs-and-fargate-a988a1cc842f
 * https://gist.github.com/tompave/8590031
 * https://itnext.io/docker-rails-puma-nginx-postgres-999cd8866b18
-  - nginxの設定ファイル(my_app.conf)はこれをパクった
+  - `my_app.conf` is based on this
 
 
 ## Deploy
@@ -64,8 +64,8 @@ docker-compose -f docker-compose-production.yml up -d --build
 * install terraform on your local machine
 * prepare S3 bucket for terraform backend
 * put terraform.tfvars in terraform dir for secret variables
-* tentatively terraform commands are executed locally
-* do not forget `./ecr_push.sh` to update images
+* tentatively terraform commands are executed locally (inside `terraform` directory)
+* do not forget `export ENV=stg; ./ecr_push.sh` to update images
 (before you do this `terraform apply` for ECS task and service due to lack of ECR image)
 
 ### ssh into the ECS instance for debugging
@@ -74,3 +74,27 @@ docker-compose -f docker-compose-production.yml up -d --build
 ```
 ssh -i [path to the private key] ec2-user@ec2-[public ip].ap-northeast-1.compute.amazonaws.com
 ```
+
+## switch deploy environment
+use `terraform workspace`
+
+### `terraform workspace` commands
+```
+$ terraform workspace -h
+Usage: terraform workspace
+
+  Create, change and delete Terraform workspaces.
+
+Subcommands:
+    delete    Delete a workspace
+    list      List Workspaces
+    new       Create a new workspace
+    select    Select a workspace
+    show      Show the name of the current workspace
+```
+
+### References
+* official document
+  - https://www.terraform.io/docs/state/workspaces.html
+* might be best-practice using `locals`
+  - https://medium.com/@diogok/terraform-workspaces-and-locals-for-environment-separation-a5b88dd516f5
